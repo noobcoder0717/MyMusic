@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="Citys"></dbname>
+    <version value="1"></version>
+
+    <list>
+        <mapping class="bean.SaveSong"/>
+        <mapping class="bean.RecentSong"/>
+        <mapping class="bean.OnlineSong"/>
+        <mapping class="bean.LoveSong"/>
+        <mapping class="bean.CurrentSong"/>
+    </list>
+</litepal>

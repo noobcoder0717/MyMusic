@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:baselineAligned="false">
+    <LinearLayout
+        android:id="@+id/songview"
+        android:background="@drawable/linearlayout_water_selector"
+        android:layout_weight="10"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/lovesong_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
+        <ImageView
+            android:id="@+id/playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/playing"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+        <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="9"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/lovesongname"
+            android:gravity="bottom"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+        <TextView
+            android:id="@+id/lovesinger_album"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/choice"
+        android:background="@drawable/linearlayout_water_selector"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
+        <ImageView
+            android:src="@drawable/choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>
