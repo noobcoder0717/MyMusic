@@ -58,7 +58,7 @@ public class SearchResult implements ISearchResult {
 
     public void getResult(final String info){
         Log.i("model","getResult");
-        singerSongApi.getInformation(10,info,"json")
+        singerSongApi.getInformation(10,info,"json")//Observable<Information>,默认只获取10首歌
                 .flatMap(new Function<Information, ObservableSource<SongUrl>>() {
                     @Override
                     public ObservableSource<SongUrl> apply(Information information) throws Exception {
@@ -77,7 +77,7 @@ public class SearchResult implements ISearchResult {
                             albummidList.add(information.getData().getSong().getList().get(i).getAlbummid());
                             intervalList.add(information.getData().getSong().getList().get(i).getInterval());
                         }
-                        return songUrlApi.getSongUrl("json",SONGURL1+information.getData().getSong().getList().get(0).getSongmid()+SONGURL2);
+                        return songUrlApi.getSongUrl("json",SONGURL1+information.getData().getSong().getList().get(0).getSongmid()+SONGURL2);//变换对象，由它来调用下一个网络请求
                     }
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

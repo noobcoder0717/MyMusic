@@ -48,8 +48,6 @@ public class DiscView extends RelativeLayout {
 
     private ObjectAnimator objectAnimator;
 
-    /*标记唱针复位后，是否需要重新偏移到唱片处*/
-    private boolean mIsNeed2StartPlayAnimator = false;
 
     //是否在暂停歌曲的情况下切歌
     private boolean pauseToNextSong=false;
@@ -219,10 +217,6 @@ public class DiscView extends RelativeLayout {
         /*唱针处于远端时，直接播放动画*/
         if (needleAnimatorStatus == NeedleAnimatorStatus.IN_FAR_END) {
             needleAnimator.start();
-        }
-        /*唱针处于往远端移动时，设置标记，等动画结束后再播放动画*/
-        else if (needleAnimatorStatus == NeedleAnimatorStatus.TO_FAR_END) {
-            mIsNeed2StartPlayAnimator = true;
         }
     }
 
