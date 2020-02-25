@@ -67,11 +67,6 @@ public class MainActivity extends AppCompatActivity  {
     private LoveSongFragment loveSongFragment;
     private Handler handler;
 
-
-    public LoveSongFragment getLoveSongFragment() {
-        return loveSongFragment;
-    }
-
     public void setLoveSongFragment(LoveSongFragment loveSongFragment) {
         this.loveSongFragment = loveSongFragment;
     }
@@ -131,6 +126,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         //状态栏透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.WHITE);
@@ -148,10 +144,10 @@ public class MainActivity extends AppCompatActivity  {
         setSaveSongPath();
 
         EventBus.getDefault().register(this);
+
         mainFragment=new MainFragment();
         addFragment(mainFragment);//默认显示mainFragment
         showFragment(1);
-
 
         Intent playIntent = new Intent(MainActivity.this,PlayService.class);
         bindService(playIntent,playConnection, Context.BIND_AUTO_CREATE);
@@ -196,7 +192,7 @@ public class MainActivity extends AppCompatActivity  {
 
         handler=new Handler(){
             @Override
-            public void handleMessage(Message msg){
+            public void handleMessage(Message msg){//当图片加载到本地后，接收消息让UI更新，
                 System.out.println("handle message");
                 Glide.with(getApplicationContext()).load(msg.obj).into(albumimage_main);
             }
@@ -209,11 +205,15 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     //将fragment添加到fragment回退栈和list中
+    //每个beginTransaction只能commit一次
+    //这说明每次getSupportFragmentManager.beginTransaction()获得的FragmentTransaction实例都是不一样的
     public void addFragment(Fragment fragment){
-        if(!fragment.isAdded()){
+        if(!fragment.isAdded()){//判断当前的fragment是否已被加入到当前activity
             FRAGMENTNUMBERS++;
+            //将fragment添加到当前activity中，并为该fragment添加一个标记。如果是第x个fragment，标记则为“fragmentx”,以便后续的查找fragment操作，来控制某个fragment的可见性
+            //addToBackStack,是将FragmentTransaction加入到回退栈中
             getSupportFragmentManager().beginTransaction().add(R.id.container,fragment,"fragment"+FRAGMENTNUMBERS).addToBackStack(null).commit();
-            fragmentList.add(fragment);
+            fragmentList.add(fragment);//将fragment实例保存到一个list中
         }
     }
     //展示第idx个fragment，非第idx个fragment都hide
@@ -224,17 +224,14 @@ public class MainActivity extends AppCompatActivity  {
         }
         FragmentManager fm=getSupportFragmentManager();
         fm.executePendingTransactions();//添加了这句 findFragmentByTag才不会返回null
-        Fragment fragment=fm.findFragmentByTag("fragment"+idx);
-
-
-        getSupportFragmentManager().beginTransaction().show(fragment).commit();
+        Fragment fragment=fm.findFragmentByTag("fragment"+idx);//通过fragment的tag找到要展示的fragment
+        getSupportFragmentManager().beginTransaction().show(fragment).commit();//展示
     }
 
-    public void pop(){
+    public void pop(){//将目前显示的fragment弹出，
         FRAGMENTNUMBERS--;
         fragmentList.remove(fragmentList.size()-1);
-        getSupportFragmentManager().popBackStack();
-        getSupportFragmentManager().beginTransaction().commit();
+        getSupportFragmentManager().popBackStack();//把之前addToBackStack的事务弹出，达到弹出之前添加的fragment的效果
         showFragment(FRAGMENTNUMBERS);
     }
 
@@ -255,6 +252,7 @@ public class MainActivity extends AppCompatActivity  {
     public int getFRAGMENTNUMBERS(){return FRAGMENTNUMBERS;}
 
 
+    //重写了实体返回键触发的事件
     @Override
     public void onBackPressed(){
         if(getSupportFragmentManager().getBackStackEntryCount()<=1){
@@ -263,10 +261,7 @@ public class MainActivity extends AppCompatActivity  {
             finish();
         }else{
             Log.i("MainActivity","onBackPressed,else");
-            getSupportFragmentManager().popBackStack();
-            FRAGMENTNUMBERS--;
-            fragmentList.remove(FRAGMENTNUMBERS);
-            showFragment(FRAGMENTNUMBERS);
+            pop();
             Log.i("MainActivity",getSupportFragmentManager().getBackStackEntryCount()+"");
         }
 
@@ -287,9 +282,9 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        unbindService(playConnection);
-        unbindService(downloadConnection);
-        EventBus.getDefault().unregister(this);
+        unbindService(playConnection);//断开服务
+        unbindService(downloadConnection);//断开服务
+        EventBus.getDefault().unregister(this);//解除注册
     }
 
     public String getSingerNames(CurrentSong cs){
@@ -321,6 +316,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    //如果本地有图片则直接加载，没有则建立HTTP连接将图片保存到本地后加载。
     public void loadAlbumImage(CurrentSong cs){
         String path=getApplicationContext().getExternalFilesDir("")+"/mvpmymusic/albumimg/";
         File file=new File(path);
