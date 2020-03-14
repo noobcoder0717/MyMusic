@@ -69,6 +69,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/song_status"/>
 
+    <CustomView.DownloadBar
+        android:id="@+id/download_bar"
+        android:visibility="gone"
+        android:layout_above="@id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_above="@+id/seekbar_layout"

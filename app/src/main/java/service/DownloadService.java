@@ -21,13 +21,19 @@ public class DownloadService extends Service {
     private DownloadListener listener=new DownloadListener() {
         @Override
         public void onProgress(int progress) {
-            Toast.makeText(getApplicationContext(),"已下载"+progress+"%",Toast.LENGTH_SHORT).show();
+            Intent intent=new Intent("com.example.mvpmymusic.downloadService");
+            intent.putExtra("progress",progress);
+            sendBroadcast(intent);
+//            Toast.makeText(getApplicationContext(),"已下载"+progress+"%",Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onSuccess() {
             downloadTask=null;
             Toast.makeText(getApplicationContext(),"下载完成",Toast.LENGTH_SHORT).show();
+            Intent intent=new Intent("com.example.mvpmymusic.downloadService");
+            intent.putExtra("progress",101);
+            sendBroadcast(intent);
         }
 
         @Override

@@ -282,6 +282,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onDestroy(){
         super.onDestroy();
+        Log.i("playService","MainActivity onDestroy");
         unbindService(playConnection);//断开服务
         unbindService(downloadConnection);//断开服务
         EventBus.getDefault().unregister(this);//解除注册

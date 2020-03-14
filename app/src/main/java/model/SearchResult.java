@@ -7,6 +7,7 @@ import android.util.Log;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -50,6 +51,8 @@ public class SearchResult implements ISearchResult {
     final ClientApi songUrlApi=RetrofitFactory.getRetrofitOfSongUrl().create(ClientApi.class);
 
     int cnt=0;
+
+
 
 
     public SearchResult(ISearchResultPresenter searchResultPresenter){

@@ -57,6 +57,7 @@ public class DiscView extends RelativeLayout {
     //初始的指针状态
     private NeedleAnimatorStatus needleAnimatorStatus = NeedleAnimatorStatus.IN_FAR_END;
 
+    //屏幕宽高
     private int mScreenWidth, mScreenHeight;
 
     public DiscView(Context context) {
@@ -174,16 +175,16 @@ public class DiscView extends RelativeLayout {
         objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
         objectAnimator.setDuration(30 * 1000);//30秒转一圈
         objectAnimator.setInterpolator(new LinearInterpolator());
-
         return objectAnimator;
     }
 
     /**
      * 得到唱盘图片
      * 唱盘图片由空心圆盘及音乐专辑图片“合成”得到
+     *
      */
     public Drawable getDiscDrawable(Bitmap bitmap) {
-        int discSize = (int) (mScreenWidth * CommonUtils.SCALE_DISC_SIZE);
+        int discSize = (int) (mScreenWidth * CommonUtils.SCALE_DISC_SIZE);//比例设计
         int musicPicSize = (int) (mScreenWidth * CommonUtils.SCALE_MUSIC_PIC_SIZE);
 
         Bitmap bitmapDisc = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R
@@ -236,18 +237,6 @@ public class DiscView extends RelativeLayout {
         }
     }
 
-    /*重置动画,用于切换歌曲时*/
-    private void restartAnimator(){
-        Log.i("DiscView",Currsong.getSTATUS()+"");
-        if(Currsong.getSTATUS()==Constant.PLAYING||Currsong.getSTATUS()==Constant.PREPARE){
-            needleAnimatorStatus=NeedleAnimatorStatus.IN_FAR_END;
-            needleAnimator.start();
-        }if(Currsong.getSTATUS()==Constant.PAUSE){//暂停状态下切歌
-            Log.i("DiscView","restartAnimator: "+Currsong.getSTATUS());
-            pauseToNextSong=true;
-            needleAnimator.start();
-        }
-    }
 
     /*播放唱盘动画*/
     private void playDiscAnimator() {
@@ -288,22 +277,4 @@ public class DiscView extends RelativeLayout {
     }
 
 
-    public void next() {
-        playAnimator();
-//        selectMusicWithButton();
-    }
-
-    public void last() {
-        playAnimator();
-//        selectMusicWithButton();
-    }
-
-//    private void selectMusicWithButton() {
-//        if (musicStatus == MusicStatus.PLAY) {
-//            mIsNeed2StartPlayAnimator = true;
-//            pauseAnimator();
-//        } else if (musicStatus == MusicStatus.PAUSE) {
-//            play();
-//        }
-//    }
 }

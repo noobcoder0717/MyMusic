@@ -33,20 +33,33 @@ public class PlayService extends Service {
     @Override
     public void onCreate(){//第一次创建服务时调用
         super.onCreate();
-        System.out.println("playService onCreate");
+        Log.i("playService","onCreate");
     }
 
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){//每次服务启动时调用
+        Toast.makeText(getApplicationContext(),"playservice onstartcommand",Toast.LENGTH_SHORT).show();
         return super.onStartCommand(intent,flags,startId);
     }
 
     @Override
     public void onDestroy(){//所有绑定该服务的都unbind了的时候调用
         super.onDestroy();
-        System.out.println("playService onDestroy");
+        Log.i("playService","onDestroy");
         mp.stop();
         mp.release();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent){
+        Log.i("playService","onUnbind");
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public boolean stopService(Intent name){
+        Log.i("playService","stopService");
+        return super.stopService(name);
     }
 
     @Override
@@ -121,51 +134,7 @@ public class PlayService extends Service {
         }
     }
 
-//        //播放最近播放歌曲
-//        public void play(RecentSong recentSong){
-//            LoveSong ls=new LoveSong();
-//            ls.setPlaying("no");
-//            ls.updateAll("isPlaying = ?","yes");
-//            try{
-//                Log.i("PlayActivity",mp.toString());
-//                Currsong.setCurrRecentSong(recentSong);
-//                Currsong.setSTATUS(Constant.STATUS_PREPARERECENTSONG);
-//                recentCurrentPosition=recentSong.getPosition();
-//                mp.reset();//reset不能在release之后调用。
-//                mp.setDataSource(recentSong.getUrl());
-//                mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                mp.prepareAsync();
-//                Log.i("PlayService",recentCurrentPosition+"/"+LitePal.findAll(RecentSong.class).size()+"");
-//            }catch (IOException e){
-//                Log.i("PlayService",e.getMessage());
-//            }
-//        }
-//
-//        //播放收藏歌曲
-//        public void play(LoveSong loveSong){
-//            try{
-//                Log.i("PlayActivity",mp.toString());
-//
-//                //修改歌曲状态
-//                LoveSong ls=new LoveSong();
-//                ls.setPlaying("yes");
-//                ls.updateAll("url = ?",loveSong.getUrl());
-//
-//                Currsong.setCurrLoveSong(loveSong);
-//                Currsong.setSTATUS(Constant.STATUS_PREPARELOVESONG);
-//                loveCurrentPosition=loveSong.getPosition();
-//                mp.reset();//reset不能在release之后调用。
-//                mp.setDataSource(loveSong.getUrl());
-//                mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                mp.prepareAsync();
-//                Log.i("PlayService",loveSong.getPosition()+"");
-//            }catch (IOException e){
-//                Log.i("PlayService",e.getMessage());
-//            }
-//        }
-//    }
-
-    public void playNextSong() {
+    private void playNextSong() {
         switch(Currsong.getSTATUS()){
             case Constant.PLAYING:
                 List<CurrentSong> currentSongList = LitePal.findAll(CurrentSong.class);
@@ -182,7 +151,7 @@ public class PlayService extends Service {
         }
     }
 
-    public void saveRecentSong(CurrentSong cs){
+    private void saveRecentSong(CurrentSong cs){
         Log.i("PlayService","saveRecentSong");
         List<RecentSong> songList=LitePal.findAll(RecentSong.class);
         RecentSong recentSong=new RecentSong();
@@ -201,30 +170,9 @@ public class PlayService extends Service {
             recentSong.save();
         }
     }
-//    public void saveRecentSong(LoveSong ls){
-//        Log.i("PlayService","saveRecentSong");
-//        List<RecentSong> songList=LitePal.findAll(RecentSong.class);
-//        RecentSong recentSong=new RecentSong();
-//        recentSong.setAlbummid(ls.getAlbummid());
-//        recentSong.setAlbumName(ls.getAlbumName());
-//        recentSong.setNeedPay(ls.isNeedPay());
-//        recentSong.setSingers(ls.getSingers());
-//        recentSong.setSongName(ls.getSongName());
-//        recentSong.setUrl(ls.getUrl());
-//        recentSong.setSongmId(ls.getSongmId());
-//        recentSong.setInterval(ls.getInterval());
-//        if(!AlreadyExist(recentSong)){
-//            Log.i("PlayService","song don't exist");
-//            recentSong.setPosition(songList.size());
-//            recentSong.save();
-//        }
-//        Log.i("PlayService",LitePal.findAll(RecentSong.class).size()+"");
-////        else{//如果这首歌已存在于最近播放列表中，则将其移至最近播放列表的最顶端
-////
-////        }
-//    }
 
-    public Boolean AlreadyExist(RecentSong recentSong){
+
+    private Boolean AlreadyExist(RecentSong recentSong){
         List<RecentSong> recentSongList=LitePal.findAll(RecentSong.class);
         if(recentSongList.size()==0)
             return false;

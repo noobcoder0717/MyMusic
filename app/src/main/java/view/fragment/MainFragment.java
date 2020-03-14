@@ -103,61 +103,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-//        my.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                my.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-//                my.setTextSize(15);
-//                find.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                find.setTextSize(13);
-//                cloudvillage.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                cloudvillage.setTextSize(13);
-//                video.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                video.setTextSize(13);
-//            }
-//        });
-//
-//        find.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                my.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                my.setTextSize(13);
-//                find.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-//                find.setTextSize(15);
-//                cloudvillage.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                cloudvillage.setTextSize(13);
-//                video.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                video.setTextSize(13);
-//            }
-//        });
-//
-//        cloudvillage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                my.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                my.setTextSize(13);
-//                find.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                find.setTextSize(13);
-//                cloudvillage.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-//                cloudvillage.setTextSize(15);
-//                video.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                video.setTextSize(13);
-//            }
-//        });
-//
-//        video.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                my.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                my.setTextSize(13);
-//                find.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                find.setTextSize(13);
-//                cloudvillage.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-//                cloudvillage.setTextSize(13);
-//                video.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-//                video.setTextSize(15);
-//            }
-//        });
         setHasOptionsMenu(true);
         AppCompatActivity activity=(AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
@@ -194,6 +139,10 @@ public class MainFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
 
 
 

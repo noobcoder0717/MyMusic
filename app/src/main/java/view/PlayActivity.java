@@ -1,9 +1,11 @@
 package view;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,6 +52,7 @@ import java.util.TimerTask;
 
 import CustomView.CustomRelativeLayout;
 import CustomView.DiscView;
+import CustomView.DownloadBar;
 import Util.CommonUtils;
 import Util.Constant;
 import Util.Currsong;
@@ -73,6 +76,10 @@ public class PlayActivity extends AppCompatActivity implements IPlayView{
     MediaPlayer mp=new MediaPlayer();
     Thread seekbarThread;
     Bitmap albumBitmap;
+    BroadcastReceiver broadcastReceiver;
+
+    @Bind(R.id.download_bar)
+    DownloadBar downloadBar;
 
     @Bind(R.id.back)
     ImageView back;
@@ -156,7 +163,30 @@ public class PlayActivity extends AppCompatActivity implements IPlayView{
             discView.play();
         if(isLoveSong(Currsong.getCurrentSong()))
             love.setBackgroundResource(R.drawable.loved);
+
+
+        broadcastReceiver=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction() == "com.example.mvpmymusic.downloadService"){
+                    Message msg=Message.obtain();
+                    msg.what=intent.getIntExtra("progress",0);
+                    downloadHandler.sendMessage(msg);
+                }
+            }
+        };
     }
+
+    private Handler downloadHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            int progress = msg.what;
+            if(progress<=100)
+                downloadBar.setProgress(progress);
+            else
+                downloadBar.setVisibility(View.GONE);
+        }
+    };
 
     private ServiceConnection playConnection = new ServiceConnection() {
         @Override
@@ -230,13 +260,7 @@ public class PlayActivity extends AppCompatActivity implements IPlayView{
     }
 
 
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        unbindService(playConnection);
-        unbindService(downloadConnection);
-        EventBus.getDefault().unregister(this);
-    }
+
 
     public String getSingerNames(CurrentSong cs){
         String SingerNames="";
@@ -278,6 +302,8 @@ public class PlayActivity extends AppCompatActivity implements IPlayView{
         setLayoutBackground();
         discView.restart2();
     }
+
+
 
     //根据播放状态更新进度条
     public void getProgress(){
@@ -334,6 +360,7 @@ public class PlayActivity extends AppCompatActivity implements IPlayView{
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                downloadBar.setVisibility(View.VISIBLE);
                 downloadBinder.startDownload(Currsong.getCurrentSong());
             }
         });
@@ -536,6 +563,23 @@ public class PlayActivity extends AppCompatActivity implements IPlayView{
                 res=true;
         }
         return res;
+    }
+
+    @Override
+    protected void onResume(){
+        IntentFilter filter=new IntentFilter();
+        filter.addAction("com.example.mvpmymusic.downloadService");
+        registerReceiver(broadcastReceiver,filter);
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+        unbindService(playConnection);
+        unbindService(downloadConnection);
+        EventBus.getDefault().unregister(this);
     }
 
 
