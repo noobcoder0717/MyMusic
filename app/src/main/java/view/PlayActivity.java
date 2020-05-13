@@ -69,7 +69,7 @@ import service.PlayService;
 
 import static org.litepal.LitePalApplication.getContext;
 
-public class PlayActivity extends AppCompatActivity implements IPlayView{
+public class PlayActivity extends AppCompatActivity{
 
     private PlayService.PlayBinder playBinder;
     private DownloadService.DownloadBinder downloadBinder;

@@ -24,6 +24,7 @@ import bean.LoveSong;
 import bean.RecentSong;
 import event.PlayingStatusEvent;
 
+
 public class PlayService extends Service {
     private int currentPosition;
     public static MediaPlayer mp = new MediaPlayer();
